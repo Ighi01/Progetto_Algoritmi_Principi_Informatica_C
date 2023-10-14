@@ -1,0 +1,33 @@
+
+- Input: - primo numero(d)= #nodi grafi -> tutti i grafi hanno lo stesso numero di nodi
+         - secondo numero(x)= #numero di indici dei grafi da cui stilare la classifica
+         - serie di matrici di adiacenza separati dalla dicitura "AggiungiGrafo"
+         - Topk che indica la fine dell'input-> quando legge topk lancia la funzione obbiettivo
+
+- Obbiettivo: Dare in output gli indici dei #x grafi col minimo Sum_nodi_da_0 (non importa l'ordine,in caso di parità 
+              si tiene in considerazione la precedenza)
+
+- Sum_nodi_da_0: Sommare le distanze tra il nodo zero (prima riga) e tutti gli altri nodi
+                 es:
+                     d=3 0 9 6                          d=3 0 0 1 
+                         6 7 5                              3 4 2
+                         0 0 2  output ritorna 9+6=15       2 1 1 output ritorna 1+1+1=3
+
+                -> idea: Algoritmo di Djkstra (variante) : Trova, dato un grafo e il nodo 0, i percorsi piu
+                         brevi dal nodo a qualunque altro, dopo di che li sommo tutti.
+
+- Possibile implementazione:
+ 
+ 0) Inizializza la classifica come una lista di x elementi di tipo struct aventi due campi:key (indice del grafo)
+    e sum_nodi_da_0 
+ 
+ 1) Ad ogni AggingiGrafo lancia l'Algoritmo di Dijksta da 0 e ritorna sum_nodi_da_0, dopo di che :
+ 
+              1.1) dato sum_nodi_da_0 scansiono la classifica dalla testa: se è minore del valore in testa allora aggiungo in testa, 
+                   altrimenti lo inserisco nel mezzo, con l'obbiettivo di mantenere la lista ordinata in ordine crescente, se è maggiore 
+                   di tutti gli elementi presenti non esegue nulla.
+              1.2) nota: gli elementi della lista devono essere al più x, dunque ad ogni scansione verifico che gli elementi siano
+                   un totale di x, se eccedono (ho inserito un elemento) elimino l'ultimo
+    ->costo 0(kn2)
+
+ 2) Quando legge in input il comando Topk stampa la classifica a partire dalla testa
